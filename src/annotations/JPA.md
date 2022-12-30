@@ -9,14 +9,14 @@
 
 > ⭐ @Entity
 - JPA 관리대상 엔티티 클래스 지정,
-- Attr = name
+- 옵션 = name
 - name 애트리뷰트를 설정하지 않으면 기본값으로 클래스 이름을 테이블 이름으로 사용
 
 <br>
 
 > ⭐ @Table
 - 테이블 지정, 미 지정시 클래시 이름이 테이블명이 됨, Optional,
-- Attr = name
+- 옵션 = name
 - name 애트리뷰트를 설정하지 않으면 기본값으로 클래스 이름을 테이블 이름으로 사용
 - @Table 애너테이션은 옵션이며, 추가하지 않을 경우 클래스 이름을 테이블 이름으로 사용
 
@@ -31,10 +31,10 @@
 
 > ⭐ @Column
 - Field <-> Column 매핑
-- Attr = nullable (default = true) - Null값 허용 여부
-- Attr = updatable (default = true) - 컬럼 수정 여부
-- Attr = unique (default = false) - 고유 값 설정 여부(제약조건 설정)
-- Attr = length (default = 255) - 컬럼에 저장할 문자 길이
+- 옵션 = nullable (default = true) - Null값 허용 여부
+- 옵션 = updatable (default = true) - 컬럼 수정 여부
+- 옵션 = unique (default = false) - 고유 값 설정 여부(제약조건 설정)
+- 옵션 = length (default = 255) - 컬럼에 저장할 문자 길이
 
 <br>
 
@@ -45,8 +45,8 @@
 
 > ⭐ @Enumerated
 - Enum 타입과 매핑
-- Attr = EnumType.STRING - enum의 이름을 테이블에 저장 (권장)
-- Attr = EnumType.ORDINAL - enum의 순서를 나타내는 숫자를 테이블에 저장
+- 옵션 = EnumType.STRING - enum의 이름을 테이블에 저장 (권장)
+- 옵션 = EnumType.ORDINAL - enum의 순서를 나타내는 숫자를 테이블에 저장
 
 <br>
 
@@ -56,12 +56,23 @@
 <br>
 
 > ⭐ @OneToMany
-- 1:N 관계 매핑, Attr = mappedBy 을 이용한 매핑주체 설정 외래키의 역할을 하는 필드에 지정
+- 1:N 관계 매핑
+- 옵션 = mappedBy
+  - 매핑주체 설정 외래키의 역할을 하는 필드에 지정
+- 옵션 = CascadeType
+  - Persist = 연관관계 매핑이 되어있는 객체를 같이 영속화 (영속성 전이)
+  - Remove = 연관관계 매핑이 되어있는 객체를 삭제하면 같이 삭제
 
 <br>
 
 > ⭐ @ManyToOne
 - N:1 관계 매핑
+- 옵션 = FetchType.Eager 
+  - 즉시 로딩 전략
+- 옵션 = FetchType.Lazy
+  - 지연 로딩 전략 (프록시 객체 생성)
+- 옵션 = Optional (Default = true)
+  - false로 설정 시, 연관관계가 항상 매핑이 되어 있어야함
 
 <br>
 
@@ -78,8 +89,8 @@
 
 > ⭐ @Transaction
 - 트랜잭션 적용,
-- Attr : readOnly = true 설정 시 읽기전용 트랜잭션 적용
-- Attr : propagation = Propagation.REQUIRED 설정 시 현재 진행중 트랜잭션이 있으면 해당 트랜잭션을 사용
+- 옵션 = readOnly = true 설정 시 읽기전용 트랜잭션 적용
+- 옵션 = propagation = Propagation.REQUIRED 설정 시 현재 진행중 트랜잭션이 있으면 해당 트랜잭션을 사용
 - 존재하지 않으면 새 트랜잭션 생성
 
 <br>
