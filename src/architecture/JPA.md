@@ -101,6 +101,8 @@
     * email검증
 * #### update
     * Id검증 + createOrder와 트랜잭션 병합, 수정하려고 하는 값이 null 이면 member.getName / 존재하면 setName
+    * Optional.ofNullable을 사용하여 Null이 될 가능성이 있는 필드 추가
+    * Optional.ofNullable을 사용 안하려면 CustomBeanUtils를 만들어서 Null 방지하기
 * #### find
     * 조회메소드는 readOnly를 주는게 좋다, id검증
 * #### Page<Member> findMembers
