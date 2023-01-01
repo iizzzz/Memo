@@ -62,6 +62,14 @@
 - 옵션 = CascadeType
   - Persist = 연관관계 매핑이 되어있는 객체를 같이 영속화 (영속성 전이)
   - Remove = 연관관계 매핑이 되어있는 객체를 삭제하면 같이 삭제
+  - Add Method 추가
+  
+// 클래스의필드.getQuestions 에 파라미터인 question 삽입
+// 파라미터의 member에 this(클래스의 필드 삽입)
+public void setQuestion(Question question) {
+  this.getQuestions().add(question);
+  question.setMember(this);
+}
 
 <br>
 
@@ -73,6 +81,14 @@
   - 지연 로딩 전략 (프록시 객체 생성)
 - 옵션 = Optional (Default = true)
   - false로 설정 시, 연관관계가 항상 매핑이 되어 있어야함
+
+// 엔티티의 필드인 멤버의 질문이 엔티티가 아니면
+// 엔티티의 필드인 멤버에 엔티티 삽입
+void addMember(Member member) {
+    this.member = member;
+    if (!this.member.getQuestions().contains(this))
+        this.member.getQuestions().add(this);
+}
 
 <br>
 
