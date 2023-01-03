@@ -57,7 +57,7 @@ public class JwtTokenizerTest {
     public void generateRefreshTokenTest() {
         String subject = "test refresh token";
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR, 24));
+        calendar.add(Calendar.HOUR, 24);
         Date expiration = calendar.getTime();
 
         String refreshToken = jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
@@ -89,7 +89,7 @@ public class JwtTokenizerTest {
     {
         Map<String, Object> claims = new HashMap<>();
         claims.put("memberId", 1);
-        claims.put("roles", List.of("USERS");
+        claims.put("roles", List.of("USERS"));
 
         String subject = "test access tokken";
         Calendar calendar = Calendar.getInstance();

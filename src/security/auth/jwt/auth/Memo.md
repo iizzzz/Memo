@@ -1,51 +1,43 @@
-```text
-//i 라이브러리
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
-	annotationProcessor 'org.projectlombok:lombok'
-	implementation 'org.mapstruct:mapstruct:1.5.2.Final'
-	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
-	implementation 'org.springframework.boot:spring-boot-starter-mail'
-	implementation 'com.google.code.gson:gson'
-
+// 라이브러리
 	implementation 'org.springframework.boot:spring-boot-starter-security' // (1)
 
-  // (2) JWT 기능을 위한 jjwt 라이브러리
+//  JWT 기능을 위한 jjwt 라이브러리
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly	'io.jsonwebtoken:jjwt-jackson:0.11.5'
 	
-//i 사전작업
+// 사전작업
 SecurityConfiguration 클래스 
 MemberDto에 password Field 추가
 Member에 password Field 추가, roles(권한 테이블 생성) 추가
 
-//i 구현
+
+// 구현
+
 ---------------------------------------------
-⭐//i MemberService = PW 암호화, Role 생성 후 DB 저장 로직 구현
+⭐// MemberService = PW 암호화, Role 생성 후 DB 저장 로직 구현
 주입 = PasswordEncoder, CustomAuthorityUtils
 
 createMember에 암호화,Role생성 후 DB 저장 로직 구현
+
 ---------------------------------------------
-⭐//i MemberDetailsService
+⭐// MemberDetailsService
 내부 private final 클래스로 custom MemberDetails 존재
 내부 클래스에서 User의 권한 생성
 Spring Security에서 인식 할 수 있는 username을 Member 클래스의 Email주소로 채움
 
+⭐// List<GrantedAuthority> 의 createAuthorities([MEMBER_NAME]) 으로 유저의 권한목록 생성
+
 ---------------------------------------------
-⭐//i 로그인 인증정보 역직렬화를 위한 LoginDto 구현
+⭐// 로그인 인증정보 역직렬화를 위한 LoginDto 구현
 멤버= username, password
 
 ---------------------------------------------
-⭐//i JWT를 생성하는 JwtTokenizer 구현
+⭐// JWT를 생성하는 JwtTokenizer 구현
 평문 인코딩, Access & Refresh Token 생성, secret Key 생성, JWT 검증 기능
 
 ---------------------------------------------
-⭐//i 로그인 인증을 처리하는 Custom Security Filter 구현
+⭐// 로그인 인증을 처리하는 Custom Security Filter 구현
 Annotation = @SneakyThrows, @Override
 상속 = UsernamePasswordAuthenticationFilter
 DI = AuthenticationManager, JwtTokenizer
@@ -68,8 +60,7 @@ param = HttpServletRequest & Response, FilterChain, Authentication {
 Access 토큰 생성 로직 String
 
 ---------------------------------------------
-⭐//i Custom Filter 추가를 위한 SecurityConfiguration에 설정 추가
+⭐// Custom Filter 추가를 위한 SecurityConfiguration에 설정 추가
 
 ---------------------------------------------
-⭐//i 로그인 인증성공, 실패에 따른 추가 처리 클래스인  AuthenticationSuccessHandler, AuthenticationFailureHandler 구현
-```
+⭐// 로그인 인증성공, 실패에 따른 추가 처리 클래스인  AuthenticationSuccessHandler, AuthenticationFailureHandler 구현

@@ -42,6 +42,11 @@ public class SecurityConfiguration {
 
         return new InMemoryUserDetailsManager(user, admin);
     }
+    
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
 
     // Custom Login Page 지정
 
