@@ -67,12 +67,26 @@ admin: admin@gmail.com
 
 <br>
 
+> ⭐ [JWT 설정]
+
+jwt:
+  key:
+    secret: ${JWT_SECRET_KEY}               # 민감한 정보는 시스템 환경 변수에서 로드한다.
+  access-token-expiration-minutes: 30
+  refresh-token-expiration-minutes: 420
+
+<br>
+
 > ⭐ [OAuth2 Client 설정]
 
-security:
-oauth2:
-client:
-registration:
-google:
-clientId: xxxxx
-client-secret: xxxxx
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: xxxxx
+            client-secret: xxxxx
+            scope: // 스코프값을 지정하면 해당 범위만큼의 Resourse를 Client(백엔드 어플리케이션)에게 제공
+            - email
+            - profile
