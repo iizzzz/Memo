@@ -1,4 +1,5 @@
-```java
+package com.server.seb41_main_11.security.authorityUtils;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -8,30 +9,20 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// 유형별 권한 생성
 @Component
 public class CustomAuthorityUtils {
 
     @Value("${mail.address.admin}")
-    private String adminMailAddress;
+    private String admin;
 
-    // 메모리 저장용
-    private final List<GrantedAuthority> ADMIN_ROLES = AuthorityUtils.createAuthorityList("ROLE_ADMIN", "ROLE_USER");
-    private final List<GrantedAuthority> USER_ROLES = AuthorityUtils.createAuthorityList("ROLE_USER");
+    @Value("${counselor.name}")
+    private String counselor;
 
     // DB 저장용
-    private final List<String> ADMIN_ROLES_STRING = List.of("ADMIN", "USER");
-    private final List<String> USER_ROLES_STRING = List.of("USER");
-
-
-
-    // 메모리 상의 Role 기반으로 권한 생성
-    public List<GrantedAuthority> createAuthorities(String email) {
-
-        if (email.equals(adminMailAddress)) {
-            return ADMIN_ROLES;
-        }
-        return USER_ROLES;
-    }
+    private final List<String> ADMIN = List.of("ADMIN", "USER", "COUNSELOR");
+    private final List<String> USER = List.of("USER");
+    private final List<String> COUNSELOR = List.of(("COUNSELOR"));
 
     // DB에 저장된 Role을 기반으로 권한 정보 생성
     public List<GrantedAuthority> createAuthorities(List<String> roles) {
@@ -39,16 +30,18 @@ public class CustomAuthorityUtils {
         List<GrantedAuthority> authorities = roles.stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_"+role))
                 .collect(Collectors.toList());
+
         return authorities;
     }
 
-    // DB 저장용
+    // DB 저장용 Role 생성 검증 요소는 알아서 필드 선정
     public List<String> createRoles(String email) {
 
-        if (email.equals(adminMailAddress)) {
-            return ADMIN_ROLES_STRING;
+        if (email.contains(admin)) {
+            return ADMIN;
+        } else if (email.contains(counselor)) {
+            return COUNSELOR;
         }
-        return USER_ROLES_STRING;
+        return USER;
     }
 }
-```
