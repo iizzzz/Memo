@@ -78,7 +78,7 @@ public class SecurityConfig {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
             // 객체 생성과 동시에 AuthenticationManager & JwtTokenizer를 DI 해줌
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, template);
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
 
             // setFilterProccessUrl() 를 통해 로그인 URL Customize 가능 (default url은 /login 이다)
             jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");

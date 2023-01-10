@@ -6,7 +6,6 @@ import com.server.seb41_main_11.user.entity.User;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,23 +18,21 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 // Username & Password 기반의 인증을 처리하기위한 상속
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenizer jwtTokenizer;
-    private final RedisTemplate<String, String> template;
+//    private final RedisTemplate<String, String> template;
 
     @Getter
     @Value("${jwt.refresh-token-expiration-minutes}")
     private int refreshTokenExpirationMinutes;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtTokenizer jwtTokenizer, RedisTemplate<String, String> template) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtTokenizer jwtTokenizer) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenizer = jwtTokenizer;
-        this.template = template;
     }
 
 
@@ -72,13 +69,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // Refresh Token 생성
         String refreshToken = delegateRefreshToken(user);
 
-        // Redis에 저장 - 만료시간 설정을 통한 자동 삭제처리
-        template.opsForValue().set(
-                user.getName(),
-                refreshToken,
-                refreshTokenExpirationMinutes,
-                TimeUnit.MILLISECONDS
-        );
+//        // Redis에 저장 - 만료시간 설정을 통한 자동 삭제처리
+//        template.opsForValue().set(
+//                user.getName(),
+//                refreshToken,
+//                refreshTokenExpirationMinutes,
+//                TimeUnit.MILLISECONDS
+//        );
 
         // Response Header에 Access Token 추가
         response.setHeader("Authorization", "Bearer " + accessToken);
