@@ -1,4 +1,4 @@
-```java
+package com.server.seb41_main_11.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -79,6 +79,14 @@ public class JwtTokenizer {
         return claims;
     }
 
+    // Decoding
+    private Key getKeyFromBase64EncodedKey(String base64EncodedSecretKey) {
+        byte[] keyBytes = Decoders.BASE64.decode(base64EncodedSecretKey);
+        Key key = Keys.hmacShaKeyFor(keyBytes);
+
+        return key;
+    }
+
     // 단순 검증 용도
     public void verifySignature(String jws, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
@@ -96,14 +104,4 @@ public class JwtTokenizer {
 
         return calendar.getTime();
     }
-
-    // 디코딩
-    private Key getKeyFromBase64EncodedKey(String base64EncodedSecretKey) {
-        byte[] keyBytes = Decoders.BASE64.decode(base64EncodedSecretKey);
-        Key key = Keys.hmacShaKeyFor(keyBytes);
-
-        return key;
-    }
 }
-
-```

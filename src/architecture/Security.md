@@ -119,19 +119,20 @@ Frondend 어플리케이션(http://localhost?access_token={jwt-access-token}&ref
 
 ### 필요한 클래스
 
-* SecurityConfig
-* CustomDetailsService
-* CustomJwtAuthenticationFilter
-* CustomUserDetailsService
-* CustomAuthorityUtils
-* JwtTokenizer
+* SecurityConfig - 보안 설정
+* CustomUserDetailsService - 유저 정보 생성
+* CustomAuthorityUtils - 유저 권한 관련
+* JwtTokenizer - 토큰 생성
+* Jwt AuthenticationFilter - 로그인 인증요청을 처리하는 필터
 * Success & Failer Handler 구현
+* Login DTO - 크리덴셜
+
 
 1. 엔티티에 password, List<String>roles 필드 추가(@ElementCollection(fetch = FetchTYpe.EAGER))
 
 2. DTO에 password 필드 추가
 
-3. CustonAuthorityUtils, SecurityConfig(HttpSecurity, CORS, Filter 등 보안설정) 작성
+3. CustomAuthorityUtils, SecurityConfig(HttpSecurity, CORS, Filter 등 보안설정) 작성
 
 4. Service에서 PasswordEncoder, CustomAuthorityUtils DI받기
 
@@ -139,4 +140,6 @@ Frondend 어플리케이션(http://localhost?access_token={jwt-access-token}&ref
 
 6. Service의 create()에 List로 권한 생성 후 엔티티에 삽입 
 
-7. 
+7. LoginDto 작성
+
+8. JwtTokenizer 작성

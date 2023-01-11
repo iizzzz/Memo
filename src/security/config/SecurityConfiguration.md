@@ -104,7 +104,7 @@ public class SecurityConfiguration {
     
     
     
-    // Custom Filter Configurer
+    // Custom JWT Login 인증 설정 Configurer
     public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
         
         @Override

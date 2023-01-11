@@ -119,9 +119,22 @@ implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
 <br>
 
+> ⭐ [Swagger]
+
+implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+
+<br>
+
 > ⭐ [WebFlux]
 
 implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+<br>
+
+> ⭐ [Redis]
+
+implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 <br>
 
