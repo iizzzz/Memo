@@ -1,4 +1,4 @@
-package com.server.seb41_main_11.post;
+package com.server.seb41_main_11.domain.post;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

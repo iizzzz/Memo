@@ -1,17 +1,20 @@
-package com.server.seb41_main_11.post;
+package com.server.seb41_main_11.domain.post;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.server.seb41_main_11.user.entity.User;
+import com.server.seb41_main_11.domain.common.BaseEntity;
+import com.server.seb41_main_11.domain.member.entity.Member;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Post {
+public class Post extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
@@ -28,10 +31,13 @@ public class Post {
     @Column(nullable = false)
     private Kind kinds;
 
+    @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<Comment> comments = new ArrayList<>();
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "MEMBER_ID")
     @JsonIgnore
-    private User user;
+    private Member member;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "COUNSELOR_ID")
@@ -45,15 +51,14 @@ public class Post {
         }
     }
 
-    void addUser(User user) {
-        this.user = user;
-        if (!this.user.getPosts().contains(this)) {
-            this.user.getPosts().add(this);
+    void addMember(Member member) {
+        this.member = member;
+        if (!this.member.getPosts().contains(this)) {
+            this.member.getPosts().add(this);
         }
     }
 
     public enum Kind {
-        NOTICE("공지사항"),
         GENERAL("일반글"),
         COUNSELOR("상담글");
 
