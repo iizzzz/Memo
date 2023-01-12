@@ -22,19 +22,21 @@ public class PostController {
     private final PostService postService;
     private final PostMapper mapper;
 
+    // 일반 유저가 글 등록
     @PostMapping
-    public ResponseEntity post(@Valid @RequestBody PostDto.userPost post) {
-        Post findPost = postService.create(mapper.postToEntity(post));
+    public ResponseEntity post(@Valid @RequestBody PostDto.UserPost post) {
+        Post findPost = postService.createByUser(mapper.postToEntity(post));
 
         return new ResponseEntity<>(new SingleResponseDto<>(mapper.entityToResponse(findPost)), HttpStatus.CREATED);
     }
 
-    @PostMapping
-    public ResponseEntity post(@Valid @RequestBody PostDto.counselorPost post) {
-        Post findPost = postService.create(mapper.postToEntity(post));
-
-        return new ResponseEntity<>(new SingleResponseDto<>(mapper.entityToResponse(findPost)), HttpStatus.CREATED);
-    }
+//    // 상담사가 글 등록
+//    @PostMapping
+//    public ResponseEntity post(@Valid @RequestBody PostDto.counselorPost post) {
+//        Post findPost = postService.createByCounselor(mapper.postToEntity(post));
+//
+//        return new ResponseEntity<>(new SingleResponseDto<>(mapper.entityToResponse(findPost)), HttpStatus.CREATED);
+//    }
 
     @PatchMapping("/{post-id}")
     public ResponseEntity patch(@PathVariable("post-id") @Positive long postId,
@@ -48,9 +50,9 @@ public class PostController {
 
     @GetMapping("/{post-id}")
     public ResponseEntity get(@PathVariable("post-id") @Positive long postId) {
-        Post Post = postService.find(postId);
+        Post findPost = postService.find(postId);
 
-        return new ResponseEntity(new SingleResponseDto<>(mapper.entityToResponse(Post)), HttpStatus.OK);
+        return new ResponseEntity(new SingleResponseDto<>(mapper.entityToResponse(findPost)), HttpStatus.OK);
     }
 
     @GetMapping
@@ -59,7 +61,7 @@ public class PostController {
         Page<Post> pagePost = postService.findAll(page-1, size);
         List<Post> posts = pagePost.getContent();
 
-        return new ResponseEntity<>(new MultiResponseDto<>(mapper.entitysToResponses(posts), pagePost), HttpStatus.OK);
+        return new ResponseEntity<>(new MultiResponseDto<>(mapper.entityToResponses(posts), pagePost), HttpStatus.OK);
     }
 
     @DeleteMapping("/{post-id}")

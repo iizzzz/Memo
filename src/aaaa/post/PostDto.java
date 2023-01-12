@@ -1,9 +1,6 @@
 package com.server.seb41_main_11.domain.post;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 public class PostDto {
@@ -11,7 +8,7 @@ public class PostDto {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class userPost {
+    public static class UserPost {
         private long memberId;
         private String title;
         private String content;
@@ -21,10 +18,10 @@ public class PostDto {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class counselorPost {
+    public static class CounselorPost {
         private long counselorId;
         private String title;
-        private String  content;
+        private String content;
         private String kinds;
     }
 
@@ -36,18 +33,24 @@ public class PostDto {
         private String title;
         private String content;
         private String kinds;
+
+        public void setPostId(long postId) {
+            this.postId = postId;
+        }
     }
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
+    @Builder
     public static class Response {
         private long postId;
         private long memberId;
         private long counselorId;
         private String title;
         private String content;
-        private String kinds;
+        private Post.Kind kinds;
+        //        private List<Comment> comments;
         private int views;
     }
 }
