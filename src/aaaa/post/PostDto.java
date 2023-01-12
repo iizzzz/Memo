@@ -50,7 +50,7 @@ public class PostDto {
         private String title;
         private String content;
         private Post.Kind kinds;
-        //        private List<Comment> comments;
+//        private List<Comment> comments;
         private int views;
     }
 }

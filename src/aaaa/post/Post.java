@@ -1,6 +1,7 @@
 package com.server.seb41_main_11.domain.post;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.server.seb41_main_11.domain.comment.Comment;
 import com.server.seb41_main_11.domain.common.BaseEntity;
 import com.server.seb41_main_11.domain.member.entity.Member;
 import lombok.*;
@@ -35,8 +36,8 @@ public class Post extends BaseEntity {
     @JsonIgnore
     private Member member;
 
-//    @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-//    private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<Comment> comments = new ArrayList<>();
 //
 //    @ManyToOne(optional = false, fetch = FetchType.LAZY)
 //    @JoinColumn(name = "COUNSELOR_ID")
@@ -57,10 +58,10 @@ public class Post extends BaseEntity {
 //        }
 //    }
 //
-//    public void setComment(Comment comment) {
-//        this.getComments.add(comment);
-//        comment.setPost(this);
-//    }
+    public void setComment(Comment comment) {
+        this.getComments().add(comment);
+        comment.setPost(this);
+    }
 
     public enum Kind {
         GENERAL("일반"),

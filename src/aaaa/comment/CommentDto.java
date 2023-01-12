@@ -1,4 +1,4 @@
-package com.server.seb41_main_11.comment;
+package com.server.seb41_main_11.domain.comment;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,8 +11,17 @@ public class CommentDto {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class Post {
-        private long userId;
+    public static class PostToUser {
+        private long memberId;
+        private long postId;
+        private String content;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PostToCounselor {
+        private long counselorId;
         private long postId;
         private String content;
     }
@@ -28,9 +37,17 @@ public class CommentDto {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class Response {
+    public static class ResponseToUser {
         private long commentId;
-        private long userId;
+        private long memberId;
+        private String content;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ResponseToCounselor {
+        private long commentId;
         private long counselorId;
         private String content;
     }

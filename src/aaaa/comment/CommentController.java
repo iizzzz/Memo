@@ -1,7 +1,7 @@
-package com.server.seb41_main_11.comment;
+package com.server.seb41_main_11.domain.comment;
 
-import com.server.seb41_main_11.globalresponse.MultiResponseDto;
-import com.server.seb41_main_11.globalresponse.SingleResponseDto;
+import com.server.seb41_main_11.domain.common.MultiResponseDto;
+import com.server.seb41_main_11.domain.common.SingleResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -23,40 +23,48 @@ public class CommentController {
     private final CommentMapper mapper;
 
     @PostMapping
-    public ResponseEntity post(@Valid @RequestBody CommentDto.Post post) {
-        Comment comment = commentService.create(mapper.postToEntity(post));
+    public ResponseEntity postC0ommentToUser(@Valid @RequestBody CommentDto.PostToUser post) {
+        Comment comment = commentService.createToUser(mapper.postToUser(post));
 
-        return new ResponseEntity<>(new SingleResponseDto<>(mapper.entityToResponse(comment)), HttpStatus.CREATED);
+        return new ResponseEntity<>(new SingleResponseDto<>(mapper.entityToMemberResponse(comment)), HttpStatus.CREATED);
     }
 
+//    // 상담사 글 등록
+//    @PostMapping
+//    public ResponseEntity postCommentToCounselor(@Valid @RequestBody CommentDto.PostToCounselor post) {
+//        Comment comment = commentService.createToUser(mapper.postToCounselor(post));
+//
+//        return new ResponseEntity<>(new SingleResponseDto<>(mapper.entityToCounselorResponse(comment)), HttpStatus.CREATED);
+//    }
+
     @PatchMapping("/{comment-id}")
-    public ResponseEntity patch(@PathVariable("comment-id") @Positive long commentId,
+    public ResponseEntity patchComment(@PathVariable("comment-id") @Positive long commentId,
                                 @Valid @RequestBody CommentDto.Patch patch) {
         patch.setCommentId(commentId);
 
         Comment update = commentService.update(mapper.patchToEntity(patch));
 
-        return new ResponseEntity<>(new SingleResponseDto<>(mapper.entityToResponse(update)), HttpStatus.OK);
+        return new ResponseEntity<>(new SingleResponseDto<>(mapper.entityToMemberResponse(update)), HttpStatus.OK);
     }
     
     @GetMapping("/{comment-id}")
-    public ResponseEntity get(@PathVariable("comment-id") @Positive long commentId) {
+    public ResponseEntity getComment(@PathVariable("comment-id") @Positive long commentId) {
         Comment comment = commentService.find(commentId);
-        
-        return new ResponseEntity(new SingleResponseDto<>(mapper.entityToResponse(comment)), HttpStatus.OK);
+
+        return new ResponseEntity(new SingleResponseDto<>(mapper.entityToMemberResponse(comment)), HttpStatus.OK);
     }
-    
+
     @GetMapping
-    public ResponseEntity getAll(@Positive @RequestParam(defaultValue = "1") int page,
+    public ResponseEntity getAllComment(@Positive @RequestParam(defaultValue = "1") int page,
                                  @Positive @RequestParam(defaultValue = "10") int size) {
         Page<Comment> pagecomment = commentService.findAll(page-1, size);
         List<Comment> comments = pagecomment.getContent();
-        
-        return new ResponseEntity<>(new MultiResponseDto<>(mapper.entitysToResponses(comments), pagecomment), HttpStatus.OK);
+
+        return new ResponseEntity<>(new MultiResponseDto<>(mapper.entitysToUserResponses(comments), pagecomment), HttpStatus.OK);
     }
     
     @DeleteMapping("/{comment-id}")
-    public ResponseEntity delete(@PathVariable("comment-id") @Positive long commentId) {
+    public ResponseEntity deleteComment(@PathVariable("comment-id") @Positive long commentId) {
         commentService.delete(commentId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -1,4 +1,4 @@
-package com.server.seb41_main_11.comment;
+package com.server.seb41_main_11.domain.comment;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

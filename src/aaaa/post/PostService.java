@@ -42,7 +42,7 @@ public class PostService {
     @Transactional(readOnly = true)
     public Post find(long postId) {
         Post post = postRepository.getReferenceById(postId);
-        updateViews(post.getPostId);
+        updateViews(postId);
 
         return post;
     }

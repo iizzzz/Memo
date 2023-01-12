@@ -1,4 +1,4 @@
-package com.server.seb41_main_11.comment;
+package com.server.seb41_main_11.domain.comment;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -9,13 +9,21 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
 
-    @Mapping(source = "userId", target = "user.userId")
-    @Mapping(source = "userId", target = "post.postId")
-    Comment postToEntity(CommentDto.Post post);
+    @Mapping(source = "memberId", target = "member.memberId")
+    @Mapping(source = "postId", target = "post.postId")
+    Comment postToUser(CommentDto.PostToUser post);
+
+//    @Mapping(source = "counselorId", target = "counselor.counselorId")
+//    @Mapping(source = "postId", target = "post.postId")
+//    Comment postToCounselor(CommentDto.PostToCounselor post);
 
     Comment patchToEntity(CommentDto.Patch patch);
 
-    CommentDto.Response entityToResponse(Comment comment);
+    @Mapping(source = "memberId", target = "member.memberId")
+    CommentDto.ResponseToUser entityToMemberResponse(Comment comment);
+    @Mapping(source = "counselorId", target = "counselor.counselorId")
+    CommentDto.ResponseToCounselor entityToCounselorResponse(Comment comment);
 
-    List<CommentDto.Response> entitysToResponses(List<Comment> comments);
+    List<CommentDto.ResponseToUser> entitysToUserResponses(List<Comment> comments);
+    List<CommentDto.ResponseToCounselor> entitysToCounselorResponses(List<Comment> comments);
 }
