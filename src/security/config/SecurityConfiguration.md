@@ -25,30 +25,34 @@ public class SecurityConfiguration {
 
     // HTTP 설정
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .headers()
-                .frameOptions()
-                .sameOrigin().and()
-                .csrf()
-                .disable()
-                .cors()
-                .configurationSource(corsConfigurationSource()).and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .httpBasic()
-                .disable()
-
-                .apply(new CustomFilterConfigurer()).and()
-                .formLogin()
-                .disable()
-                .logout()
-                .logoutSuccessHandler((request, response, authentication) -> {
-                    response.setStatus(HttpServletResponse.SC_OK);})
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .headers().frameOptions().sameOrigin()
                 .and()
-                .authorizeHttpRequests(auth ->
-                        auth.mvcMatchers().authenticated().anyRequest().permitAll())
-                .build();
+                .csrf().disable()
+                .cors(withDefaults())
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .formLogin().disable()
+                .httpBasic().disable()
+                // Exception Handling - EntryPoint, AccessDenied Handler 추가
+                .exceptionHandling()
+                .authenticationEntryPoint(new MemberAuthenticationEntryPoint())
+                .accessDeniedHandler(new MemberAccessDeniedHandler())
+                .and()
+                // Custom Configuration 추가
+                .apply(new CustomFilterConfigurer())
+                .and()
+                // URL 별로 접근 권한 부여
+                .authorizeHttpRequests(authorize -> authorize
+                        .antMatchers(HttpMethod.POST, "/*/members").permitAll()
+                        .antMatchers(HttpMethod.PATCH, "/*/members").hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "/*/members").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.GET, "/*/members/**").hasAnyRole("USER", "ADMIN")
+                        .antMatchers(HttpMethod.DELETE, "/*/members/**").hasRole("USER")
+                        .anyRequest().permitAll()
+                );
+        return http.build();
     }
     
     // CORS 설정
@@ -101,26 +105,37 @@ public class SecurityConfiguration {
     public PasswordEncoder pwEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
-    
-    
-    
-    // Custom JWT Login 인증 설정 Configurer
-    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
-        
-        @Override
-        public void configure(HttpSecurity http) {
-            AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
 
+    /** JWT AuthenticationFilter 등록
+      * AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> 를 이용해 Custom Configurer 구현 가능
+      * 파라미터로는 <상속하는타입, HttpSecurityBuilder를 상속하는 타입을 제네릭으로 지정>
+      */
+    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
+
+        // Configure Method 를 Override 함으로써 SecurityConfig 를 Customizing 할 수 있다
+        @Override
+        public void configure(HttpSecurity builder) throws Exception {
+
+            // getSharedObject()로 인해 SecurityConfigurer 간에 공유되는 객체를 얻을 수 있음
+            // AuthenticationManager 객체를 얻음
+            AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
+
+            // JwtAuthenticationFilter 객체 생성과 동시에,
+            // AuthenticationManager & JwtTokenizer를 DI 해줌
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
-            
-            jwtAuthenticationFilter.setFilterProcessesUrl("/login");
+
+            // setFilterProccessUrl() 를 통해 로그인 URL Customizing (default url은 /login 이다)
+            jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");
+            // Success, Failure Handler 추가
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, memberService);
+            // JWT를 생성할 때, JwtVerificationFilter 에서 사용되는 객체들을 DI
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
 
-            http
-                    .addFilter(jwtAuthenticationFilter)
+            // addFilter()를 통해 JWT 검증필터를 Spring Security Filter Chain에 추가
+            // addFilter()를 JwtAuthenticationFilter가 수행된 바로 다음에 동작하도록 추가
+            builder.addFilter(jwtAuthenticationFilter)
                     .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
         }
     }
