@@ -1,4 +1,8 @@
 ```java
+/**
+ * 인증 성공 시 추가작업을 할 수 있는 클래스
+ */
+
 @Slf4j
 public class MemberAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
