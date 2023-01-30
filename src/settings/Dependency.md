@@ -71,7 +71,7 @@ implementation 'org.springframework.boot:spring-boot-starter-jta-atomikos'
 
 > ⭐ [Gson]
 
-implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
+implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.9'
 
 <br>
 
