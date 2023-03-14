@@ -1,8 +1,8 @@
-//i 문자열을 입력받아 순서가 뒤집힌 문자열 리턴
+## 문자열을 입력받아 순서가 뒤집힌 문자열 리턴
 
-//i String 인스턴스는 생성 되면 read-only지만 buffer는 rw다
+## String 인스턴스는 생성 되면 read-only지만 buffer는 rw다
 
-//i Method
+### Method
 append() = 문자열 추가
 capacity() = 버퍼크기 반환 (default 16 + 문자열의 길이 리턴)
 delete(1,6) = 범위 삭제
